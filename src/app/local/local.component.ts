@@ -1,15 +1,18 @@
 import { Component, OnInit, ViewEncapsulation, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import { INPUT_EVENT_TYPE, MOVE_INPUT_MODE, COLOR, Chessboard } from 'cm-chessboard';
+import { Injectable } from '@angular/core';
+
 @Component({
   selector: 'app-local',
   templateUrl: './local.component.html',
   styleUrls: ['./local.component.css'],
   encapsulation: ViewEncapsulation.None,
-  template: `<div width="100%" height="100%" #board></div>`
+  template: `<div width="100%" height="100%" #board></div>`,
 })
+
 export class LocalComponent implements AfterViewInit {
-    @ViewChild('board') board: ElementRef;
-    ngAfterViewInit() {
+@ViewChild('board') board: ElementRef;
+ngAfterViewInit() {
     console.log(this.board.nativeElement.innerHTML);
     var tab = new Chessboard(this.board.nativeElement,
         {
@@ -25,6 +28,7 @@ export class LocalComponent implements AfterViewInit {
             moveInputMode: MOVE_INPUT_MODE.dragPiece, // set to MOVE_INPUT_MODE.dragPiece or MOVE_INPUT_MODE.dragMarker for interactive movement
         })
         tab.setPosition('start');
+        var chess = new Chess();
         tab.enableMoveInput((event) => {
             switch (event.type) {
                 case INPUT_EVENT_TYPE.moveStart:
@@ -33,12 +37,16 @@ export class LocalComponent implements AfterViewInit {
                 return true
                 case INPUT_EVENT_TYPE.moveDone:
                 console.log(`moveDone: ${event.squareFrom}-${event.squareTo}`)
-                // return true, if input is accepted/valid, `false` takes the move back
-                return true
+                const move = {from: event.squareFrom, to: event.squareTo}
+                if (chess.move(move))
+                    return true
+                else
+                    return false
                 case INPUT_EVENT_TYPE.moveCanceled:
                 console.log(`moveCanceled`)
             }
         }, COLOR.white);
+        /*
         tab.enableMoveInput((event) => {
             switch (event.type) {
                 case INPUT_EVENT_TYPE.moveStart:
@@ -53,5 +61,6 @@ export class LocalComponent implements AfterViewInit {
                 console.log(`moveCanceled`)
             }
         }, COLOR.black);
+        */
     }
 }

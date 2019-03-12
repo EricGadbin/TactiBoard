@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
+    "@types/chess.js": "^0.10.0",
     "@types/chessboardjs": "^0.3.1",
     "cm-chessboard": "^2.13.9",
     "core-js": "^2.5.4",
