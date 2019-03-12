@@ -52,3 +52,5 @@ ngAfterViewInit() {
     });
 }
 }
+
+declare var Chess: any;
