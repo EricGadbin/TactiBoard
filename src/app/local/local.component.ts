@@ -15,52 +15,40 @@ export class LocalComponent implements AfterViewInit {
 ngAfterViewInit() {
     console.log(this.board.nativeElement.innerHTML);
     var tab = new Chessboard(this.board.nativeElement,
-        {
-            position: "empty", // set as fen, "start" or "empty"
-            orientation: COLOR.white, // white on bottom
-            style: {
-                cssClass: "default",
-                showCoordinates: false, // show ranks and files
-                showBorder: false, // display a border around the board
-            },
-            responsive: true, // resizes the board on window resize, if true
-            animationDuration: 300, // pieces animation duration in milliseconds
-            moveInputMode: MOVE_INPUT_MODE.dragPiece, // set to MOVE_INPUT_MODE.dragPiece or MOVE_INPUT_MODE.dragMarker for interactive movement
-        })
-        tab.setPosition('start');
-        var chess = new Chess();
-        tab.enableMoveInput((event) => {
-            switch (event.type) {
-                case INPUT_EVENT_TYPE.moveStart:
-                console.log(`moveStart: ${event.square}`)
-                // return `true`, if input is accepted/valid, `false` aborts the interaction, the piece will not move
+    {
+        position: "empty", // set as fen, "start" or "empty"
+        orientation: COLOR.white, // white on bottom
+        style: {
+            cssClass: "default",
+            showCoordinates: false, // show ranks and files
+            showBorder: false, // display a border around the board
+        },
+        responsive: true, // resizes the board on window resize, if true
+        animationDuration: 300, // pieces animation duration in milliseconds
+        moveInputMode: MOVE_INPUT_MODE.dragPiece, // set to MOVE_INPUT_MODE.dragPiece or MOVE_INPUT_MODE.dragMarker for interactive movement
+    })
+    tab.setPosition('start');
+    var chess = new Chess();
+    tab.enableMoveInput((event) => {
+        switch (event.type) {
+            case INPUT_EVENT_TYPE.moveStart:
+            console.log(chess.moves({square: event.square, verbose: true}));
+            if (chess.moves({square: event.square, verbose: true})[0])
                 return true
-                case INPUT_EVENT_TYPE.moveDone:
+            else
+                return false
+            case INPUT_EVENT_TYPE.moveDone:
                 console.log(`moveDone: ${event.squareFrom}-${event.squareTo}`)
                 const move = {from: event.squareFrom, to: event.squareTo}
-                if (chess.move(move))
+                var ret = chess.move(move);
+                console.log(ret);
+                if (ret)
                     return true
                 else
                     return false
-                case INPUT_EVENT_TYPE.moveCanceled:
+            case INPUT_EVENT_TYPE.moveCanceled:
                 console.log(`moveCanceled`)
-            }
-        }, COLOR.white);
-        /*
-        tab.enableMoveInput((event) => {
-            switch (event.type) {
-                case INPUT_EVENT_TYPE.moveStart:
-                console.log(`moveStart: ${event.square}`)
-                // return `true`, if input is accepted/valid, `false` aborts the interaction, the piece will not move
-                return true
-                case INPUT_EVENT_TYPE.moveDone:
-                console.log(`moveDone: ${event.squareFrom}-${event.squareTo}`)
-                // return true, if input is accepted/valid, `false` takes the move back
-                return true
-                case INPUT_EVENT_TYPE.moveCanceled:
-                console.log(`moveCanceled`)
-            }
-        }, COLOR.black);
-        */
-    }
+        }
+    });
+}
 }
