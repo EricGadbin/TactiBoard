@@ -1,19 +1,34 @@
 import { Component, OnInit, ViewEncapsulation, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import { PIECE, INPUT_EVENT_TYPE, MOVE_INPUT_MODE, COLOR, MARKER_TYPE, Chessboard } from 'cm-chessboard';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-local',
   templateUrl: './local.component.html',
   styleUrls: ['./local.component.css'],
   encapsulation: ViewEncapsulation.None,
-  template: `<div width="100%" height="100%" #board></div>`,
+  template: `<div width="100%" height="100%" id="board" #board></div>
+             <div id="game_over_back"></div>
+             <div id="game_over_msg">
+                <p style="margin: 10px">Les {{ color }} ont gagnés</p>
+                <div id="buttons">
+                    <button mat-raised-button (click)="Reload()" color="primary"> Rejouer </button>
+                    <br />
+                    <button mat-raised-button routerLink="../chess" color="warn" style="margin: 25px"> Sortir </button>
+                </div>
+             </div>`,
 })
 
 export class LocalComponent implements AfterViewInit {
 @ViewChild('board') board: ElementRef;
+constructor(private router: Router) { }
+
+    color = "";
+    tab = 0;
     ngAfterViewInit() {
-        var tab = {
+        this.tab = {
             board: new Chessboard(this.board.nativeElement,
                 {
                     position: "start",
@@ -30,7 +45,12 @@ export class LocalComponent implements AfterViewInit {
             chess: new Chess(),
             mov: 0
         }
+        var tab = this.tab;
         tab.board.enableMoveInput((event) => {
+            if (tab.chess.turn() == 'b')
+                this.color = "blancs";
+            else
+                this.color = "noirs";
             switch (event.type) {
                 case INPUT_EVENT_TYPE.moveStart:
                     tab.mov = tab.chess.moves({square: event.square, verbose: true});
@@ -45,6 +65,13 @@ export class LocalComponent implements AfterViewInit {
             }
         });
     }
+    Reload() {
+        this.tab.board.setPosition("start");
+        $("#game_over_back").css("display", "none");
+        $("#game_over_msg").css("display", "none");
+        this.tab.board.removeMarkers(null, MARKER_TYPE.emphasize)
+        this.tab.chess = new Chess();
+    }
 }
 
 declare var Chess: any;
@@ -57,7 +84,6 @@ function moveDone(event, tab) {
         if (pos != null && pos.type == 'k' && pos.color == 'b')
             var posB = tab.chess.SQUARES[i]
     }
-    console.log(tab.mov);
     if (tab.chess.move({from: event.squareFrom, to: event.squareTo})) {
         checkMate(tab, posB, posW);
         checkRoque(tab, event);
@@ -113,8 +139,10 @@ function checkRoque(tab, event) {
 }
 
 function checkMate(tab, posB, posW) {
-    if (tab.chess.in_checkmate() == true)
-        console.log("ECHEC ET MAT MON BRO !");
+    if (tab.chess.in_checkmate() == true) {
+        $("#game_over_back").css("display", "block");
+        $("#game_over_msg").css("display", "block");
+    }
     if (tab.chess.in_check() == true) {
         if (tab.chess.turn() == 'b')
             tab.board.addMarker(posB, MARKER_TYPE.emphasize)
@@ -133,7 +161,6 @@ function checkMate(tab, posB, posW) {
 
 function checkPromotion(tab, event, posB, posW) {
     var turn = tab.chess.turn();
-    turn == 'b' ? turn = 'w' : 'b';
     if (tab.chess.move({from: event.squareFrom, to: event.squareTo, promotion: 'q'})) {
         setTimeout(function() {
             tab.board.setPiece(event.squareTo, turn + 'q');

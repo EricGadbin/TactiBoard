@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 const appRoutes: Routes = [
   { path: 'local', component: LocalComponent },
   { path: 'online', component: OnlineComponent },
+  { path: 'chess', component: ChessComponent },
   { path: '', component: ChessComponent },
 ];
 
@@ -28,7 +29,7 @@ const appRoutes: Routes = [
     BrowserModule,
     MatButtonModule,
     MatCheckboxModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, {onSameUrlNavigation: 'reload'}),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],

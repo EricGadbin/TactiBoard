@@ -27,11 +27,3 @@ var settings = {
 $.ajax(settings).done(function (response) {
     console.log(response);
 });
-
-function GoToLocal() {
-    this.router.navigate(['local']);
-}
-
-function GoToOnline() {
-
-}
