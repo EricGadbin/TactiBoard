@@ -7,6 +7,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LocalComponent } from './local/local.component';
 import { ChessComponent } from './chess/chess.component';
 import { OnlineComponent } from './online/online.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   { path: 'local', component: LocalComponent },
@@ -26,7 +28,8 @@ const appRoutes: Routes = [
     BrowserModule,
     MatButtonModule,
     MatCheckboxModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

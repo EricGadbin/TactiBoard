@@ -67,8 +67,8 @@ div {
   opacity: 0.7; }
 
 .cm-chessboard .markers .marker.emphasize {
-  stroke: blue;
-  opacity: 0.5; }
+  stroke: red;
+  opacity: 0.8; }
 
 .cm-chessboard .pieces, .cm-chessboard .markers {
   pointer-events: none; }
