@@ -27,11 +27,13 @@ export class LocalComponent implements AfterViewInit {
                     animationDuration: 300,
                     moveInputMode: MOVE_INPUT_MODE.dragPiece,
                 }),
-            chess: new Chess()
+            chess: new Chess(),
+            mov: 0
         }
         tab.board.enableMoveInput((event) => {
             switch (event.type) {
                 case INPUT_EVENT_TYPE.moveStart:
+                    tab.mov = tab.chess.moves({square: event.square, verbose: true});
                     if (tab.chess.moves({square: event.square, verbose: true})[0])
                         return true
                     else
@@ -55,12 +57,59 @@ function moveDone(event, tab) {
         if (pos != null && pos.type == 'k' && pos.color == 'b')
             var posB = tab.chess.SQUARES[i]
     }
+    console.log(tab.mov);
     if (tab.chess.move({from: event.squareFrom, to: event.squareTo})) {
         checkMate(tab, posB, posW);
+        checkRoque(tab, event);
+        checkPassant(tab, event);
         return true
     }
     else
         return (checkPromotion(tab, event, posB, posW));
+}
+
+function checkPassant(tab, event) {
+    for (var i = 0; i < tab.mov.length; i += 1) {
+        if (tab.mov[i].flags == "e" && tab.mov[i].from == event.squareFrom && tab.mov[i].to == event.squareTo && tab.mov[i].color == "w") {
+            setTimeout(function() {
+                tab.board.setPiece(event.squareTo[0] + (Number(event.squareTo[1]) - 1), null);
+            }, 350);
+        }
+        else if (tab.mov[i].flags == "e" && tab.mov[i].from == event.squareFrom && tab.mov[i].to == event.squareTo && tab.mov[i].color == "b") {
+            setTimeout(function() {
+                tab.board.setPiece(event.squareTo[0] + (Number(event.squareTo[1]) + 1), null);
+            }, 350);
+        }
+    }
+}
+
+function checkRoque(tab, event) {
+    for (var i = 0; i < tab.mov.length; i += 1) {
+        if (tab.mov[i].san == "O-O" && tab.mov[i].from == event.squareFrom && tab.mov[i].to == event.squareTo && tab.mov[i].color == "w") {
+            setTimeout(function() {
+                tab.board.setPiece("f1", "wr");
+                tab.board.setPiece("h1", null);
+            }, 350);
+        }
+        if (tab.mov[i].san == "O-O" && tab.mov[i].from == event.squareFrom && tab.mov[i].to == event.squareTo && tab.mov[i].color == "b") {
+            setTimeout(function() {
+                tab.board.setPiece("f8", "br");
+                tab.board.setPiece("h8", null);
+            }, 350);
+        }
+        if (tab.mov[i].san == "O-O-O" && tab.mov[i].from == event.squareFrom && tab.mov[i].to == event.squareTo && tab.mov[i].color == "w") {
+            setTimeout(function() {
+                tab.board.setPiece("d1", "wr");
+                tab.board.setPiece("a1", null);
+            }, 350);
+        }
+        if (tab.mov[i].san == "O-O-O" && tab.mov[i].from == event.squareFrom && tab.mov[i].to == event.squareTo && tab.mov[i].color == "b") {
+            setTimeout(function() {
+                tab.board.setPiece("d8", "br");
+                tab.board.setPiece("a8", null);
+            }, 350);
+        }
+    }
 }
 
 function checkMate(tab, posB, posW) {
