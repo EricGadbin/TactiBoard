@@ -26,7 +26,7 @@ export class LocalComponent implements AfterViewInit {
 constructor(private router: Router) { }
 
     color = "";
-    tab = 0;
+    tab: any;
     ngAfterViewInit() {
         this.tab = {
             board: new Chessboard(this.board.nativeElement,
@@ -35,8 +35,8 @@ constructor(private router: Router) { }
                     orientation: COLOR.white,
                     style: {
                         cssClass: "default",
-                        showCoordinates: false,
-                        showBorder: false,
+                        showCoordinates: true,
+                        showBorder: true,
                     },
                     responsive: true,
                     animationDuration: 300,
