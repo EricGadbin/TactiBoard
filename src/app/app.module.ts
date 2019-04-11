@@ -9,11 +9,16 @@ import { ChessComponent } from './chess/chess.component';
 import { OnlineComponent } from './online/online.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { HttpClientModule } from '@angular/common/http';
+import { ChessWhiteComponent } from './chess-white/chess-white.component';
+import { ChessBlackComponent } from './chess-black/chess-black.component';
 
 const appRoutes: Routes = [
   { path: 'local', component: LocalComponent },
   { path: 'online', component: OnlineComponent },
   { path: 'chess', component: ChessComponent },
+  { path: 'chessWhite', component: ChessWhiteComponent },
+  { path: 'chessBlack', component: ChessBlackComponent },
   { path: '', component: ChessComponent },
 ];
 
@@ -23,10 +28,13 @@ const appRoutes: Routes = [
     AppComponent,
     LocalComponent,
     ChessComponent,
-    OnlineComponent
+    OnlineComponent,
+    ChessWhiteComponent,
+    ChessBlackComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     MatButtonModule,
     MatCheckboxModule,
     RouterModule.forRoot(appRoutes, {onSameUrlNavigation: 'reload'}),
