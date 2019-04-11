@@ -10,13 +10,27 @@ import * as $ from "jquery";
   styleUrls: ['./local.component.css'],
   encapsulation: ViewEncapsulation.None,
   template: `<div width="100%" height="100%" id="board" #board></div>
+             <div id="settings_button">
+                <button id="short_button" (click)="openSettingMenu()" mat-raised-button color="primary"> ↓ </button>
+             </div>
              <div id="game_over_back"></div>
-             <div id="game_over_msg">
+             <div id="game_over_msg" class="menu">
                 <p style="margin: 10px">Les {{ color }} ont gagnés</p>
                 <div id="buttons">
                     <button mat-raised-button (click)="Reload()" color="primary"> Rejouer </button>
                     <br />
                     <button mat-raised-button routerLink="../chess" color="warn" style="margin: 25px"> Sortir </button>
+                </div>
+            </div>
+            <div id="settingsMenu" class="menu">
+                <div class="divHeader">
+                    <p>Couleurs de plateau:</p>
+                    <p class="fakeButton" (click)="closeSettingMenu()">x</p>
+                </div>
+                <div style="margin-top=20px">
+                    <button mat-raised-button (click)="changeBoardColor('default')" style="background-color: #b79877;"> Marron </button><br/>
+                    <button mat-raised-button (click)="changeBoardColor('blue')" style="background-color: #9cb1d8;" > Bleu </button><br/>
+                    <button mat-raised-button (click)="changeBoardColor('green')"  style="background-color: #87b798;"> Vert </button><br/>
                 </div>
              </div>`,
 })
@@ -45,25 +59,7 @@ constructor(private router: Router) { }
             chess: new Chess(),
             mov: 0
         }
-        var tab = this.tab;
-        tab.board.enableMoveInput((event) => {
-            if (tab.chess.turn() == 'b')
-                this.color = "blancs";
-            else
-                this.color = "noirs";
-            switch (event.type) {
-                case INPUT_EVENT_TYPE.moveStart:
-                    tab.mov = tab.chess.moves({square: event.square, verbose: true});
-                    if (tab.chess.moves({square: event.square, verbose: true})[0])
-                        return true
-                    else
-                        return false
-                case INPUT_EVENT_TYPE.moveDone:
-                    return (moveDone(event, tab));
-                case INPUT_EVENT_TYPE.moveCanceled:
-                    console.log(`moveCanceled`)
-            }
-        });
+        this.setTurns();
     }
     Reload() {
         this.tab.board.setPosition("start");
@@ -71,6 +67,63 @@ constructor(private router: Router) { }
         $("#game_over_msg").css("display", "none");
         this.tab.board.removeMarkers(null, MARKER_TYPE.emphasize)
         this.tab.chess = new Chess();
+    }
+    hideSettings() {
+        $("#short_button").css("display", "block");
+        $("#long_button").css("display", "none");
+    }
+    showSettings() {
+        $("#short_button").css("display", "none");
+        $("#long_button").css("display", "block");
+    }
+    openSettingMenu() {
+        $("#settings_button").css("display", "none");
+        $("#game_over_back").css("display", "block");
+        $("#settingsMenu").css("display", "block");
+    }
+    closeSettingMenu() {
+        $("#settings_button").css("display", "block");
+        $("#game_over_back").css("display", "none");
+        $("#settingsMenu").css("display", "none");
+    }
+    setTurns() {
+        this.tab.board.enableMoveInput((event) => {
+            if (this.tab.chess.turn() == 'b')
+                this.color = "blancs";
+            else
+                this.color = "noirs";
+            switch (event.type) {
+                case INPUT_EVENT_TYPE.moveStart:
+                    this.tab.mov = this.tab.chess.moves({square: event.square, verbose: true});
+                    if (this.tab.chess.moves({square: event.square, verbose: true})[0])
+                        return true
+                    else
+                        return false
+                case INPUT_EVENT_TYPE.moveDone:
+                    return (moveDone(event, this.tab));
+                case INPUT_EVENT_TYPE.moveCanceled:
+                    console.log(`moveCanceled`)
+            }
+        });
+    }
+    changeBoardColor(color) {
+        var pos = this.tab.board.getPosition();
+        this.tab.board.destroy();
+        this.tab.board = new Chessboard(this.board.nativeElement,
+            {
+                position: pos,
+                orientation: COLOR.white,
+                style: {
+                    cssClass: color,
+                    showCoordinates: true,
+                    showBorder: true,
+                },
+                responsive: true,
+                animationDuration: 300,
+                moveInputMode: MOVE_INPUT_MODE.dragPiece,
+            });
+        console.log(this.tab.board.props.style.cssClass)
+        this.setTurns();
     }
 }
 
