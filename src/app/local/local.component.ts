@@ -24,13 +24,19 @@ import * as $ from "jquery";
             </div>
             <div id="settingsMenu" class="menu">
                 <div class="divHeader">
-                    <p>Couleurs de plateau:</p>
                     <p class="fakeButton" (click)="closeSettingMenu()">x</p>
                 </div>
-                <div id="color_buttons">
+                <p style="text-align: left;margin-left: 10px;">Couleurs de plateau:</p>
+                <div class="buttons">
                     <button mat-raised-button (click)="changeBoardColor('default')" style="background-color: #b79877;"> Marron </button><br/>
                     <button mat-raised-button (click)="changeBoardColor('blue')" style="background-color: #9cb1d8;" > Bleu </button><br/>
                     <button mat-raised-button (click)="changeBoardColor('green')"  style="background-color: #87b798;"> Vert </button><br/>
+                </div>
+                <p style="text-align: left;margin-left: 10px;">Affichage des pièces:</p>
+                <div class="buttons">
+                    <button mat-raised-button (click)="changePieces('default')"> Toutes </button><br/>
+                    <button mat-raised-button (click)="changePieces('white')"> Seulement les blancs </button><br/>
+                    <button mat-raised-button (click)="changePieces('black')"> Seulement les noirs </button><br/>
                 </div>
              </div>`,
 })
@@ -124,6 +130,9 @@ constructor(private router: Router) { }
             });
         console.log(this.tab.board.props.style.cssClass)
         this.setTurns();
+    }
+    changePieces(pieces) {
+        console.log("path/" + pieces + ".png");
     }
 }
 

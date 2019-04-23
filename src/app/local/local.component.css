@@ -12,7 +12,7 @@ body {
     font-weight: bolder;
 }
 
-#color_buttons {
+.buttons {
     padding-top: 5%;
     padding-bottom: 5%;
 }
@@ -36,8 +36,7 @@ body {
 }
 
 .divHeader {
-    display: flex;
-    justify-content: space-between;
+float: right;
     margin-left: 10%;
     margin-right: 10%;
     height: 60px;
@@ -61,6 +60,7 @@ body {
     text-align: center;
     font-size: 30px;
     padding-top: 10px;
+    overflow-y: auto;
 }
 
 #settings_button {
