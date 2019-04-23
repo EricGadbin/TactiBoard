@@ -12,6 +12,11 @@ body {
     font-weight: bolder;
 }
 
+#color_buttons {
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
 #long_button {
     padding: 2% 4% 2% 4%;
 }
@@ -60,6 +65,11 @@ body {
 
 #settings_button {
     position: absolute;
+}
+
+#short_button {
+    transform: translate(-20%, -20%);
+    font-size: 50px;
 }
 
 #buttons {

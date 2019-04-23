@@ -11,7 +11,7 @@ import * as $ from "jquery";
   encapsulation: ViewEncapsulation.None,
   template: `<div width="100%" height="100%" id="board" #board></div>
              <div id="settings_button">
-                <button id="short_button" (click)="openSettingMenu()" mat-raised-button color="primary"> ↓ </button>
+                <button id="short_button" (click)="openSettingMenu()" mat-fab style="background-color: #FFF;"> ↓ </button>
              </div>
              <div id="game_over_back"></div>
              <div id="game_over_msg" class="menu">
@@ -27,7 +27,7 @@ import * as $ from "jquery";
                     <p>Couleurs de plateau:</p>
                     <p class="fakeButton" (click)="closeSettingMenu()">x</p>
                 </div>
-                <div style="margin-top=20px">
+                <div id="color_buttons">
                     <button mat-raised-button (click)="changeBoardColor('default')" style="background-color: #b79877;"> Marron </button><br/>
                     <button mat-raised-button (click)="changeBoardColor('blue')" style="background-color: #9cb1d8;" > Bleu </button><br/>
                     <button mat-raised-button (click)="changeBoardColor('green')"  style="background-color: #87b798;"> Vert </button><br/>
