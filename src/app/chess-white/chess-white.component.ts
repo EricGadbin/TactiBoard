@@ -313,7 +313,7 @@ function checkPromotion(tab, event, posB, posW) {
 
 function apiReset() {
     var response = $.ajax({
-        "url": "http://10.101.53.76:5000/reset",
+        "url": "http://10.101.51.150:5000/reset",
         "method": "GET",
         "timeout": 0,
         "headers": {
@@ -327,7 +327,7 @@ function apiReset() {
 
 function apiTurn() {
     var response = $.ajax({
-        "url": "http://10.101.53.76:5000/turn",
+        "url": "http://10.101.51.150:5000/turn",
         "method": "GET",
         "timeout": 0,
         "headers": {
@@ -341,7 +341,7 @@ function apiTurn() {
 
 function apiBoard() {
     var response = $.ajax({
-        "url": "http://10.101.53.76:5000/board",
+        "url": "http://10.101.51.150:5000/board",
         "method": "GET",
         "timeout": 0,
         "headers": {
@@ -355,7 +355,7 @@ function apiBoard() {
 
 function apiMove(move1, move2) {
     var response = $.ajax({
-        "url": `http://10.101.53.76:5000/move?begin=${move1.toUpperCase()}&end=${move2.toUpperCase()}`,
+        "url": `http://10.101.51.150:5000/move?begin=${move1.toUpperCase()}&end=${move2.toUpperCase()}`,
         "method": "GET",
         "timeout": 0,
         "headers": {
